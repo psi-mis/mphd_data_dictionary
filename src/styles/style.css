@@ -1,0 +1,10 @@
+.data-list 
+{
+    height: calc( 100vh - 80px );
+}
+
+.data-list th 
+{
+    text-transform: uppercase;
+    font-weight: bold;
+}
