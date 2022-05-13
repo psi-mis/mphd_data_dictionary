@@ -116,13 +116,12 @@ function SortableDataList({ headers, dataList, rowClickHandler, selectedDataId }
 					/>
 					<TableBody>
 						{Utils.sortByKey(dataList, orderBy, order ).map((row, index) => {
-							
 							return (
 									<StyledTableRow key={index} 
-										hover
 										style={{cursor: "pointer"}}
-										className={(selectedDataId != undefined && selectedDataId == row.id ) ? "row-selected" : ""}
+										className={(row.invalidMsg != undefined && row.invalidMsg != "" ) ? "error" : ""}
 										onClick={(e) => handleOnClick( e, row )}
+										title={row.invalidMsg}
 									>
 										{headers.map((headerCell) => (
 											<StyledTableCell

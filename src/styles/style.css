@@ -8,3 +8,7 @@
     text-transform: uppercase;
     font-weight: bold;
 }
+
+.error {
+    background-color: #e75050;
+}

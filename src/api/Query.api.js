@@ -25,23 +25,23 @@ export const getDataElementList = async() => {
 		},
 	});
 
-	let result = [];
-	for( let i=0; i<dataSets.dataSets.length; i++ )
-	{
-		const dataSet = dataSets.dataSets[i];
-		let deList = dataSet.dataSetElements;
-		for( let j=0; j<deList.length; j++ )
-		{
-			let dataElement = deList[j].dataElement;
-			dataElement.dataSet = {
-				id: dataSet.id,
-				periodType: dataSet.periodType,
-				displayName: dataSet.displayName,
-			}
-			result.push( dataElement );
-		}
+	// let deList = [];
+	// for( let i=0; i<dataSets.dataSets.length; i++ )
+	// {
+	// 	const dataSet = dataSets.dataSets[i];
+	// 	let deList = dataSet.dataSetElements;
+	// 	for( let j=0; j<deList.length; j++ )
+	// 	{
+	// 		let dataElement = deList[j].dataElement;
+	// 		dataElement.dataSet = {
+	// 			id: dataSet.id,
+	// 			periodType: dataSet.periodType,
+	// 			displayName: dataSet.displayName,
+	// 		}
+	// 		result.push( dataElement );
+	// 	}
 
-	}
+	// }
 
-	return result;
+	return Utils.resolveDataElementList( dataSets.dataSets );
 }

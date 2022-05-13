@@ -54,14 +54,15 @@ function DataElementTable({statusData, dataElementList}) {
 		for( let i=0; i<dataElementList.length; i++ )
 		{
 			const dataElement = dataElementList[i];
-
+			const dataSetInfo = Utils.getDatasetInfo( dataElement.dataSets );
 			const dataItem = {
 				id: dataElement.id,
-				name: dataElement.displayName,
+				name: dataElement.name,
 				code: dataElement.code,
 				description: dataElement.description,
-				catCombo: dataElement.categoryCombo.displayName,
-				periodType: dataElement.dataSet.periodType
+				catCombo: dataElement.catCombo,
+				periodType: dataSetInfo.periodTypeList,
+				invalidMsg: ( dataElement.dataSets.length == 1 ) ? "" : TranslationService.translate("dataElementList_msg_moreThanOneDataSetError", "This data element belongs to many data sets : ") + " " + dataSetInfo.nameList
 			}
 
 			list.push( dataItem );
@@ -76,8 +77,6 @@ function DataElementTable({statusData, dataElementList}) {
 			<SortableDataListComponent 
 				headers={createHeaderList()}
 				dataList={createDataList()}
-				// selectedDataId={actionItemEventId}
-				// rowClickHandler={handleOnClickRow}
 			/>
 		</div>
 	)
