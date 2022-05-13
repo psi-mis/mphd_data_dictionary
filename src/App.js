@@ -6,7 +6,9 @@ import * as api from "./api";
 import * as Constant from  "./constants";
 import { fetchAppData } from  "./redux";
 import DataElementsTable from "./forms/DataElements.table";
-;
+import * as TranslationService from "./services/Translation.service";
+import "./styles/style.css";
+
 
 const App = ({ statusData, fetchAppData }) => {
 
@@ -21,9 +23,10 @@ const App = ({ statusData, fetchAppData }) => {
   	return  ( statusData.status == Constant.FETCH_APP_DATA_LOAD_REQUEST 
             || statusData.status == Constant.FETCH_APP_DATA_LOAD_FAILURE )
 		? (
-			<h2>{statusData.message}</h2>
+			<h1>{statusData.message}</h1>
 		) : (
 			<>
+				<h2 className="header">{TranslationService.translate("dataList_appHeader", "Data Dictionary")}</h2>
 				<DataElementsTable />
 			</>
 		);

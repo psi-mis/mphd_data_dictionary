@@ -1,3 +1,32 @@
+
+/***** SCROLL BAR **/
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+  
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #837E7C; 
+}
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #000; 
+}
+
+
+
+/***** HEADER **/
+.header {
+    margin-left: 10px;
+}
+
+
+/***** data-list **/
+
 .data-list 
 {
     height: calc( 100vh - 80px );
@@ -7,8 +36,21 @@
 {
     text-transform: uppercase;
     font-weight: bold;
+    background-color: #29465B !important;
+    color: #fff !important;
 }
 
+/** for sorted header **/
+.data-list .Mui-active {
+    color: #fff !important;
+}
+
+.MuiTableSortLabel-icon {
+    color: #fff !important;
+}
+
+/***** Others **/
+
 .error {
-    background-color: #e75050;
+    background-color: #e75050 !important;
 }

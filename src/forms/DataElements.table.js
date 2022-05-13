@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import "../styles/style.css";
 import { connect } from "react-redux";
 import * as Constant from "../constants";
 import * as Utils from "../utils";
-import {setAICurrentQuestionIdx, resetMessageStatus} from "../redux";
-import Snackbar from '@mui/material/Snackbar';
-import Portal from '@mui/material/Portal';
-import Alert from '@mui/material/Alert';
 import * as TranslationService from "../services/Translation.service";
 import SortableDataListComponent from "../components/SortableDataList.component";
 
