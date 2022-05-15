@@ -117,7 +117,7 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
 
 	return (
         <>
-            <div onClick={() => showDialog()}>{TranslationService.translate("dataList_label_settings", "Settings")}</div>
+            <div style={{cursor: "pointer"}} onClick={() => showDialog()}>{TranslationService.translate("dataList_label_settings", "Settings")}</div>
 
             <Portal>
 				{( statusData.status == Constant.FETCH_SETTING_DATA_LOAD_SUCCESS
