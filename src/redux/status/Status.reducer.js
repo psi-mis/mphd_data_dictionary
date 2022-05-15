@@ -23,7 +23,8 @@ const StatusReducer = (state = initialState, action) => {
 
 		return newState;
 	}
-	else if( action.type == Constant.FETCH_APP_DATA_LOAD_FAILURE ) 
+	else if( action.type == Constant.FETCH_APP_DATA_LOAD_FAILURE 
+			|| action.type == Constant.SAVE_SETTING_DATA_FAILURE ) 
 	{
 		let errMsg = TranslationService.translate("commonTerms_msg_error", "ERROR") + ": ";
 		if( action.payload[0] != undefined )

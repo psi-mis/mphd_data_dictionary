@@ -4,18 +4,31 @@ import * as Utils from "../../utils";
 
 
 const initialState = {
-	"list": []
+	"dataElements": [],
+	"dataSets": [],
+	"settingData": { isNew: true, dataSets: [], displayedColumns: []}
 }
 
 
 const DataElementListReducer = (state = initialState, action) => {
 	let newState = Utils.cloneJson( state );
 
-	if( action.type == Constant.FETCH_APP_DATA_LOAD_SUCCESS ) 
+	if( action.type == Constant.FETCH_APP_DATA_LOAD_SUCCESS )
 	{
-		newState.list = action.payload;
+		newState = action.payload;
 		return newState;
 	}
+	else if( action.type == Constant.FORCE_TO_DO_SETTINGS )
+	{
+		newState.dataSets = action.payload;
+		return newState;
+	}	
+	else if( action.type == Constant.SAVE_SETTING_DATA_SUCCESS )
+	{
+		newState.settingData = action.payload.settingData;
+		newState.dataElements = action.payload.dataElements;
+		return newState;
+	}	
 	else
 	{
 		return state;

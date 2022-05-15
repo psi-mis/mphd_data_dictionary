@@ -57,3 +57,46 @@ export const findItemFromList = ( list, value, propertyName ) =>
 export const cloneJson = ( jsonData ) => {
     return JSON.parse(JSON.stringify(jsonData));
 }
+
+
+// --------------------------------------------------------------------------------
+// For HTML 
+
+export const moveSelectedOptions = ( sourceTag, targetTag ) => {
+	
+	for(let i=sourceTag.options.length-1; i>=0; i--)	
+	{
+		const option = sourceTag.options[i];
+		if(option.selected)
+		{
+			addOption( targetTag, option );
+			removeOption( sourceTag, i );
+		}
+	}
+	
+}
+
+
+export const moveAllOptions = ( sourceTag, targetTag ) => {
+	
+	for(let i=sourceTag.options.length-1; i>=0; i--)	
+	{
+		const option = sourceTag.options[i];
+		addOption( targetTag, option );
+		removeOption( sourceTag, i );
+	}
+	
+}
+
+
+const addOption = ( tag, option ) => {
+	var tempOption = document.createElement("OPTION");
+	tempOption.text = option.text;
+	tempOption.value = option.value;
+	tag.options.add( tempOption );
+}
+
+const removeOption = ( tag, i ) => {
+	tag.remove(i);
+}
+

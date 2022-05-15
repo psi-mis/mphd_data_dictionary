@@ -84,7 +84,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function SortableDataList({ headers, dataList, rowClickHandler, selectedDataId }) {
     
 	const [order, setOrder] = React.useState("asc");
-	const [orderBy, setOrderBy] = React.useState(headers[0].id);
+	const [orderBy, setOrderBy] = React.useState( headers.length > 0 ? headers[0].id : "" );
 	
 	useEffect(() => {
 		

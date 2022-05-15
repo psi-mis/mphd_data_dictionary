@@ -7,57 +7,45 @@ import * as TranslationService from "../services/Translation.service";
 import SortableDataListComponent from "../components/SortableDataList.component";
 
 
-function DataElementTable({statusData, dataElementList}) {
+function DataElementTable({statusData, settingData, dataElementList}) {
 
 	
-	// useEffect(() => {
+	useEffect(() => {
 		
-	// }, [miniDisplayed])
+	}, [settingData])
 
-	const createHeaderList = () => {
-		return [
+	const getDataTableHeaders = () => {
+		let result = [];
+		const allHeaders = Constant.getDataTableHeaders();
+		const settingDisplayedColumns = settingData.displayedColumns;
+		for( let i=0; i<settingDisplayedColumns.length; i++ )
+		{
+			const header = Utils.findItemFromList( allHeaders, settingDisplayedColumns[i] );
+			if( header != undefined )
 			{
-				id: "name",
-				valueType: "TEXT",
-				label: TranslationService.translate("common_terms_name", "Name")
-			},
-			{
-				id: "code",
-				valueType: "TEXT",
-				label: TranslationService.translate("common_terms_code", "Code")
-			},
-			{
-				id: "description",
-				valueType: "TEXT",
-				label: TranslationService.translate("common_terms_description", "Description")
-			},
-			{
-				id: "catCombo",
-				valueType: "TEXT",
-				label: TranslationService.translate("common_terms_desegregation", "Desegregation")
-			},
-			{
-				id: "periodType",
-				valueType: "TEXT",
-				label: TranslationService.translate("common_terms_frequency", "Frequency")
+				result.push( header );
 			}
-		]
+		}
+
+		return result;
 	}
 
 	const createDataList = () => {
 		let list = [];
+
 		for( let i=0; i<dataElementList.length; i++ )
 		{
 			const dataElement = dataElementList[i];
 			const dataSetInfo = Utils.getDatasetInfo( dataElement.dataSets );
 			const dataItem = {
 				id: dataElement.id,
-				name: dataElement.name,
+				name: dataElement.displayName,
 				code: dataElement.code,
 				description: dataElement.description,
-				catCombo: dataElement.catCombo,
+				catCombo: dataElement.categoryCombo.displayName,
 				periodType: dataSetInfo.periodTypeList,
-				invalidMsg: ( dataElement.dataSets.length == 1 ) ? "" : TranslationService.translate("dataElementList_msg_moreThanOneDataSetError", "This data element belongs to many data sets : ") + " " + dataSetInfo.nameList
+				dataSets: dataSetInfo.nameList,
+				invalidMsg: ( dataElement.dataSets.length == 1 ) ? "" : TranslationService.translate("dataElementList_msg_moreDataSetError", "This data element belongs to more than one data sets ")
 			}
 
 			list.push( dataItem );
@@ -70,7 +58,7 @@ function DataElementTable({statusData, dataElementList}) {
 
 		<div>
 			<SortableDataListComponent 
-				headers={createHeaderList()}
+				headers={getDataTableHeaders()}
 				dataList={createDataList()}
 			/>
 		</div>
@@ -82,7 +70,8 @@ function DataElementTable({statusData, dataElementList}) {
 const mapStateToProps = (state) => {
 	return {
 		statusData: state.statusData,
-		dataElementList: state.dataElementList.list
+		dataElementList: state.data.dataElements,
+        settingData: state.data.settingData
 	};
 };
 

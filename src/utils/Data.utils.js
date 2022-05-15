@@ -22,14 +22,10 @@ export const resolveDataElementList = ( dataSets ) => {
             }
             else // Add new Data element in the result
             {
-                const dataItem = {
-                    id: dataElement.id,
-                    name: dataElement.displayName,
-                    code: dataElement.code,
-                    description: dataElement.description,
-                    catCombo: dataElement.categoryCombo.displayName,
-                    dataSets: [dataSet]
-                }
+                let dataItem = dataElement;
+                dataItem.catCombo = dataElement.categoryCombo.displayName,
+                dataItem.dataSets = [dataSet];
+                
                 list.push( dataItem );
             }
         }

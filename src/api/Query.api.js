@@ -8,40 +8,75 @@ export const setEngine = engineInstance => {
 }
 
 //************************************************************************************************** */
-// For Data Elements
+// For Data Set
 
-export const getDataElementList = async() => {
-
-	const dataSetIdParams = Constant.DATA_ELEMENT_ID_LIST.join(",");
+export const getDataSets = async() => {
 
 	const { dataSets } = await engine.query({
 		dataSets: {
 			resource: "dataSets",
 			params: () => ({
-				fields:["id","displayName","periodType","dataSetElements[dataElement[id,displayName,code,description,categoryCombo[id,displayName]]]"],
-				filter: ["id:in:[" + dataSetIdParams + "]"],
 				paging: false
 			})
 		},
 	});
 
-	// let deList = [];
-	// for( let i=0; i<dataSets.dataSets.length; i++ )
-	// {
-	// 	const dataSet = dataSets.dataSets[i];
-	// 	let deList = dataSet.dataSetElements;
-	// 	for( let j=0; j<deList.length; j++ )
-	// 	{
-	// 		let dataElement = deList[j].dataElement;
-	// 		dataElement.dataSet = {
-	// 			id: dataSet.id,
-	// 			periodType: dataSet.periodType,
-	// 			displayName: dataSet.displayName,
-	// 		}
-	// 		result.push( dataElement );
-	// 	}
+	return dataSets.dataSets;
+}
 
-	// }
+
+// Load Add Project name in Settings dataStore
+export const getSettingData = async () => {
+
+    try
+    {
+        const {dataStore} = await engine.query({
+            dataStore: {
+                resource: Constant.DATA_STORE_SETTING_BASE_URL
+            },
+        })
+    
+        return dataStore;
+    }
+    catch(err)
+    {
+        return err;
+    }
+};
+
+
+
+// Save a new Settings data in DHIS data store 
+export const saveSettingData = ( settingData ) => {
+
+    var type = ( settingData.isNew ) ? "create" : "update";
+	delete settingData.isNew;
+
+    return engine.mutate({
+        resource: Constant.DATA_STORE_SETTING_BASE_URL,
+        type: type,
+        data: settingData
+    });
+}
+
+
+//************************************************************************************************** */
+// For Data Elements
+
+export const getDataElementList = async( dataSetIdList ) => {
+
+	const dataSetIdParams = dataSetIdList.join(",");
+
+	const { dataSets } = await engine.query({
+		dataSets: {
+			resource: "dataSets",
+			params: () => ({
+				fields:["id","displayName","periodType","dataSetElements[dataElement[id,displayName,shortName,code,description,categoryCombo[id,displayName]]]"],
+				filter: ["id:in:[" + dataSetIdParams + "]"],
+				paging: false
+			})
+		},
+	});
 
 	return Utils.resolveDataElementList( dataSets.dataSets );
 }
