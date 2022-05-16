@@ -22,6 +22,8 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { saveSettingData } from  "../redux";
 import "../styles/style.css";
 
@@ -47,7 +49,8 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
 
     const [open, setOpen] = React.useState(false);
     const [tempSettingData, setTempSettingData] = React.useState( Utils.cloneJson( settingData ) );
-    
+    const [availableListSelected, setAvailableListSelected] = React.useState([]);
+    const [selectedListSelected, setSelectedListSelected] = React.useState([]);
 
 	
 	useEffect(() => {
@@ -68,24 +71,89 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
 	}
 
     // ------------------------------------------------------------------
-
+    // For MULTI SELECTED BOX
     
-    const moveToSelectedDropdown = ( e ) => {
-	
-        const copiedSettingData = Utils.cloneJson( tempSettingData );
-        copiedSettingData.dataSets.push( e.target.value );
+    const getSelectedOptions = (e) => {
+        const { options } = event.target;
+        const values = [];
+        for (let i = 0, l = options.length; i < l; i += 1) {
+            if (options[i].selected) {
+                values.push(options[i].value);
+            }
+        }
 
+        return values;
+    }
+
+    const handleChangeAvailableMultiple = (e) => {
+        const values = getSelectedOptions( e );
+        setAvailableListSelected(values);
+    }
+
+    const handleChangeSelectedMultiple = (e) => {
+        const values = getSelectedOptions( e );
+        setSelectedListSelected(values);
+    }
+
+    const handleClickMoveAllToSelectedMultiple = () => {
+        const availableList = getAvailableDataSetList();
+
+        const copiedSettingData = Utils.cloneJson( tempSettingData );
+        for( let i=0; i<availableList.length; i++ )
+        {
+            copiedSettingData.dataSets.push( availableList[i].id );
+        }
         setTempSettingData( copiedSettingData );
     }
     
-    const moveToAvailableDropdown = ( e ) => {
+    const handleClickMoveToSelectedMultiple = (e) => {
+        const copiedSettingData = Utils.cloneJson( tempSettingData );
+        for( let i=0; i<availableListSelected.length; i++ )
+        {
+            copiedSettingData.dataSets.push( availableListSelected[i] );
+        }
+        setTempSettingData( copiedSettingData );
+    }
+
+    const handleClickMoveToAvailableMultiple = (e) => {
+        const copiedSettingData = Utils.cloneJson( tempSettingData );
+        for( let i=0; i<selectedListSelected.length; i++ )
+        {
+            copiedSettingData.dataSets.splice( copiedSettingData.dataSets.indexOf(selectedListSelected[i]), 1 );
+        }
+        setTempSettingData( copiedSettingData );
+    }
+
+    const handleClickMoveAllToAvailableMultiple = () => {
+        const copiedSettingData = Utils.cloneJson( tempSettingData );
+        copiedSettingData.dataSets = [];
+        setTempSettingData( copiedSettingData );
+    }
+
+
+    const moveToSelectedMultiple = ( e ) => {
+	
+        const selectedDatasetId = e.target.value;
+        const copiedSettingData = Utils.cloneJson( tempSettingData );
+        copiedSettingData.dataSets.push( selectedDatasetId );
+
+
+        setAvailableListSelected( [] );
+        setTempSettingData( copiedSettingData );
+    }
+    
+    const moveToAvailableMultiple = ( e ) => {
         const copiedSettingData = Utils.cloneJson( tempSettingData );
         copiedSettingData.dataSets.splice( copiedSettingData.dataSets.indexOf(e.target.value), 1 );
-        
+        setSelectedListSelected( [] );
         setTempSettingData( copiedSettingData );
     }
 
+    
+
     // END - MULTI SELECTED BOX
+    // ------------------------------------------------------------------
+
 
     const setDisplayedColumns = ( event ) => {
         
@@ -145,16 +213,18 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
                         
                         <Table>
                             <TableRow>
-                                <TableCell>
+                                <TableCell style={{width: "48%"}}>
                                     <FormControl sx={{ m: 1, width: "100%" }}>
                                         <InputLabel shrink htmlFor="select-multiple-native">
                                             {TranslationService.translate("settingsForm_title_available", "Available")}
                                         </InputLabel>
                                         <Select multiple native id="availableDataSet" 
                                             label= {TranslationService.translate("settingsForm_title_available", "Available")}
-                                            onDoubleClick={(e) => moveToSelectedDropdown(e)}>
+                                            onDoubleClick={(e) => moveToSelectedMultiple(e)}
+                                            onChange={(e) => handleChangeAvailableMultiple(e)} 
+                                        >
                                             {getAvailableDataSetList().map((dataSet) => (
-                                                <option key={dataSet.id} value={dataSet.id}>
+                                                <option key={dataSet.id} value={dataSet.id} title={dataSet.displayName}>
                                                     {dataSet.displayName}
                                                 </option>
                                             ))}
@@ -162,26 +232,27 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
                                     </FormControl>
                                 </TableCell>
 
-                                {/* <TableCell> */}
-
-                                    {/* <KeyboardDoubleArrowRightIcon onClick={(e) => Utils.moveAllOptions(document.getElementById("availableDataSet"), document.getElementById("selectedDataSet") )}/> */}
-                                    {/* <br/><ArrowRightIcon onClick={(e) => moveToSelectedDropdown(e)}/> */}
+                                <TableCell>
+                                    <KeyboardDoubleArrowRightIcon style={{cursor: "pointer"}} onClick={(e) => handleClickMoveAllToSelectedMultiple()}/>
+                                    <br/><ArrowRightIcon style={{cursor: "pointer"}} onClick={(e) => handleClickMoveToSelectedMultiple(e)}/>
                                 
-                                    {/* <br/><ArrowLeftIcon onClick={(e) => moveToAvailableDropdown(e)}/> */}
-                                    {/* <br/><KeyboardDoubleArrowLeftIcon onClick={(e) => Utils.moveAllOptions(document.getElementById("selectedDataSet"), document.getElementById("availableDataSet") )}/> */}
+                                    <br/><ArrowLeftIcon style={{cursor: "pointer"}} onClick={(e) => handleClickMoveToAvailableMultiple(e)}/>
+                                    <br/><KeyboardDoubleArrowLeftIcon style={{cursor: "pointer"}} onClick={(e) => handleClickMoveAllToAvailableMultiple()}/>
                                    
-                                {/* </TableCell> */}
+                                </TableCell>
                                 
-                                <TableCell> 
+                                <TableCell style={{width: "48%"}}> 
                                     <FormControl sx={{ m: 1, width: "100%" }}>
                                         <InputLabel shrink htmlFor="select-multiple-native">
                                             {TranslationService.translate("settingsForm_title_selected", "Selected")}
                                         </InputLabel>
                                         <Select multiple native id="selectedDataSet" 
                                             label={TranslationService.translate("settingsForm_title_selected", "Selected")}
-                                            onDoubleClick={(e) => moveToAvailableDropdown(e)} >
+                                            onDoubleClick={(e) => moveToAvailableMultiple(e)}
+                                            onChange={(e) => handleChangeSelectedMultiple(e)} 
+                                        >
                                             {tempSettingData.dataSets.map((dataSetId) => (
-                                                <option key={dataSetId} value={dataSetId}>
+                                                <option key={dataSetId} value={dataSetId} title={Utils.findItemFromList(dataSetList, dataSetId).displayName}>
                                                     {Utils.findItemFromList(dataSetList, dataSetId).displayName}
                                                 </option>
                                             ))}
@@ -193,11 +264,11 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
 
                     </details>   
 
-                    <details open>
+                    <details open style={{marginTop: "20px"}}>
                         <summary>
                             {TranslationService.translate("settingsForm_header_showHideColumns", "Show/Hide Columns")}
                         </summary>
-                            <Box sx={{ flexDirection: 'column' }}>
+                            <Box sx={{ flexDirection: 'column' }} style={{margin: "10px"}}>
                                 {Constant.getDataTableHeaders().map((header)=>(
                                     <FormControlLabel
                                         value={header.id}
@@ -215,7 +286,7 @@ function SettingsForm( {statusData, settingData, dataSetList, saveSettingData} )
                 
                 <DialogActions>
                     <Button onClick={() => saveData()}>{TranslationService.translate("settingsForm_btn_save","Save")}</Button>
-                    <Button onClick={() => setOpen(false)}>{TranslationService.translate("settingsForm_btn_cancel","Cancel")}</Button>
+                    <Button color="error" onClick={() => setOpen(false)}>{TranslationService.translate("settingsForm_btn_cancel","Cancel")}</Button>
                 </DialogActions>
             </Dialog>
         </>

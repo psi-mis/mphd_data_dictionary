@@ -18,10 +18,10 @@ function DataElementTable({statusData, settingData, dataElementList}) {
 		let result = [];
 		const allHeaders = Constant.getDataTableHeaders();
 		const settingDisplayedColumns = settingData.displayedColumns;
-		for( let i=0; i<settingDisplayedColumns.length; i++ )
+		for( let i=0; i<allHeaders.length; i++ )
 		{
-			const header = Utils.findItemFromList( allHeaders, settingDisplayedColumns[i] );
-			if( header != undefined )
+			const header = allHeaders[i]
+			if( settingDisplayedColumns.indexOf(allHeaders[i].id) >= 0 )
 			{
 				result.push( header );
 			}

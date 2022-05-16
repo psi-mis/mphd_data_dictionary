@@ -6,7 +6,7 @@ import * as Utils from "../../utils";
 const initialState = {
 	"dataElements": [],
 	"dataSets": [],
-	"settingData": { isNew: true, dataSets: [], displayedColumns: []}
+	"settingData": { isNew: true, dataSets: [], displayedColumns: ["code", "shortName", "name", "description", "catCombo", "dataSets", "periodType"]}
 }
 
 

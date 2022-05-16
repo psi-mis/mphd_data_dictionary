@@ -37,6 +37,7 @@
     font-size: .6em;
     color: #000;    
     margin-top: 5px;
+    cursor: pointer;
 }
 
 /***** data-list **/
@@ -77,12 +78,12 @@
 {
     background-color: #F8F9F9;
     margin: 10px 0px;
+    border: 1px solid #d6dbdf;
 }
 
 .settings-form summary
 {
     background-color: #D6DBDF;
-    margin: 10px 0px;
     padding: 10px 0px;
 }
 
