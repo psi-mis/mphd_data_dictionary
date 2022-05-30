@@ -26,7 +26,7 @@ export const getDataTableHeaders = () => {
         {
             id: "catCombo",
             valueType: "TEXT",
-            label: TranslationService.translate("common_terms_desegregation", "Desegregation")
+            label: TranslationService.translate("common_terms_disaggregation", "Disaggregation")
         },
         {
             id: "dataSets",
